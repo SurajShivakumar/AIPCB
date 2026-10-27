@@ -1,0 +1,70 @@
+[2026-10-07 00:49:51,925] [ERROR] Python process is not running
+KiCAD MCP SERVER READY
+=== list_schematic_components [ok]
+Components (8):
+  U2: MosFet Symbol:CSD18532NQ5B = "CSD18532NQ5B" at (554.99, 77.47) rot=0° [8 pins]
+  U3: MosFet Symbol:CSD18532NQ5B = "CSD18532NQ5B" at (650.24, 86.36) rot=0° [8 pins]
+  U6: MosFet Symbol:CSD18532NQ5B = "CSD18532NQ5B" at (656.59, 118.11) rot=0° [8 pins]
+  U4: MCU_ST_STM32G4:STM32G431CBTx = "STM32G431CBTx" at (139.7, 99.06) rot=0° [48 pins]
+  U8: MosFet Symbol:CSD18532NQ5B = "CSD18532NQ5B" at (656.59, 193.04) rot=0° [8 pins]
+  U1: MosFet Symbol:CSD18532NQ5B = "CSD18532NQ5B" at (541.02, 49.53) rot=0° [8 pins]
+  U5: New_Library for Gate Driver:DRV8320HRTVT = "DRV8320HRTVT" at (497.84, 101.6) rot=0° [33 pins]
+  U7: MosFet Symbol:CSD18532NQ5B = "CSD18532NQ5B" at (650.24, 161.29) rot=0° [8 pins]
+=== run_erc [ok]
+ERC result: 102 violation(s)
+  Errors: 0  Warnings: 102  Info: 0
+
+1. [warning] Symbol pin or wire end off connection grid @ (3.95986, 0.6604)
+2. [warning] Symbol pin or wire end off connection grid @ (3.9243, 0.6604)
+3. [warning] Symbol pin or wire end off connection grid @ (3.95986, 0.86614)
+4. [warning] Symbol pin or wire end off connection grid @ (4.05384, 0.61468)
+5. [warning] Symbol pin or wire end off connection grid @ (3.9243, 0.635)
+6. [warning] Symbol pin or wire end off connection grid @ (4.05384, 0.635)
+7. [warning] Symbol pin or wire end off connection grid @ (4.05384, 0.63754)
+8. [warning] Symbol pin or wire end off connection grid @ (4.05384, 0.63754)
+9. [warning] The current configuration does not include the footprint library 'Diode Footprint for ESC'. @ (4.05384, 0.67564)
+10. [warning] Symbol pin or wire end off connection grid @ (4.05384, 0.86614)
+11. [warning] Symbol pin or wire end off connection grid @ (4.19862, 0.61468)
+12. [warning] Symbol pin or wire end off connection grid @ (4.19862, 0.69088)
+13. [warning] Symbol pin or wire end off connection grid @ (4.19862, 0.69088)
+14. [warning] Symbol pin or wire end off connection grid @ (4.19862, 0.69088)
+15. [warning] Symbol pin or wire end off connection grid @ (4.19862, 0.86614)
+16. [warning] Symbol pin or wire end off connection grid @ (4.32054, 0.61468)
+17. [warning] Symbol pin or wire end off connection grid @ (4.32054, 0.69088)
+18. [warning] Symbol pin or wire end off connection grid @ (4.32054, 0.69088)
+19. [warning] Symbol pin or wire end off connection grid @ (4.46024, 0.61468)
+20. [warning] Symbol pin or wire end off connection grid @ (4.46024, 0.69088)
+21. [warning] Symbol pin or wire end off connection grid @ (4.46024, 0.69088)
+22. [warning] Symbol pin or wire end off connection grid @ (4.46024, 0.72898)
+23. [warning] Symbol pin or wire end off connection grid @ (4.66344, 0.41148)
+24. [warning] Symbol pin or wire end off connection grid @ (4.63296, 0.69088)
+25. [warning] Symbol pin or wire end off connection grid @ (4.63296, 0.69088)
+26. [warning] Symbol pin or wire end off connection grid @ (4.7498, 0.5842)
+27. [warning] Symbol pin or wire end off connection grid @ (4.69646, 0.5842)
+28. [warning] Symbol pin or wire end off connection grid @ (4.69646, 0.5842)
+29. [warning] Symbol pin or wire end off connection grid @ (4.68884, 0.6604)
+30. [warning] Symbol pin or wire end off connection grid @ (4.7498, 0.6604)
+... and 72 more
+=== list_schematic_nets [ok]
+Nets (21):
+  BEMF_A [4 pin(s)]: R20/2, U4/9, R26/1, R23/1
+  BEMF_B [4 pin(s)]: R27/1, R24/1, R21/2, U4/15
+  BEMF_C [4 pin(s)]: R22/2, R28/1, U4/16, R25/1
+  ENABLE [2 pin(s)]: U4/44, U5/22
+  GHB [2 pin(s)]: R7/1, U5/12
+  GHC [2 pin(s)]: R14/1, U5/13
+  GLB [2 pin(s)]: R12/1, U5/10
+  GLC [2 pin(s)]: R16/1, U5/15
+  GND [75 pin(s)]: C17/2, U2/1, U2/2, U2/3, R24/2, D2/1, C8/2, C10/2, C12/2, C11/2, U6/1, U6/2, U6/3, C7/2, C18/1, C2/2, C3/2, C4/2, C13/2, C5/2, GND1/1, U4/23, U4/35, U4/47, U4/19, C19/2, C15/2, C9/2, U8/1, U8/2, U8/3, C6/2, R5/1, R13/1, R9/1, Y1/2, Y1/4, D1/1, J1/1, Bat-1/1, C1/2, R17/1, R23/2, U5/18, U5/8, U5/9, U5/16, U5/23, U5/31, U5/33, R10/1, C20/2, R25/2
+  INHA [2 pin(s)]: U4/30, U5/25
+  INHB [2 pin(s)]: U4/31, U5/27
+  INHC [2 pin(s)]: U4/32, U5/29
+  INLA [2 pin(s)]: U4/27, U5/26
+  INLB [2 pin(s)]: U4/28, U5/28
+  INLC [2 pin(s)]: U4/29, U5/30
+  NEUTRAL [6 pin(s)]: R27/2, R28/2, U4/18, U4/12, U4/13, R26/2
+  Phase_A [11 pin(s)]: U2/8, U2/7, U2/6, U2/5, R20/1, U1/1, U1/2, U1/3, R1/1, U5/6, MotA1/1
+  Phase_B [11 pin(s)]: U3/1, U3/2, U3/3, R21/1, U6/8, U6/7, U6/6, U6/5, MotB1/1, R8/1, U5/11
+  Phase_C [11 pin(s)]: R22/1, U8/8, U8/7, U8/6, U8/5, MotC1/1, R15/1, U5/14, U7/1, U7/2, U7/3
+  VM [21 pin(s)]: D2/2, U3/8, U3/7, U3/6, U3/5, C12/1, C11/1, C13/1, Bat+1/1, U1/8, U1/7, U1/6, U1/5, C14/2, U5/3, U5/4, U7/8, U7/7, U7/6, U7/5
+  nFAULT [3 pin(s)]: U4/43, U5/17, R11/2

@@ -1,0 +1,7 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "MosFet")(type "KiCad")(uri "${KIPRJMOD}/libs/MosFet.pretty")(options "")(descr "TI DNK0008A SON5x6"))
+	(lib (name "Gate Driver")(type "KiCad")(uri "${KIPRJMOD}/libs/Gate Driver.pretty")(options "")(descr "TI RTV0032E WQFN-32"))
+	(lib (name "Diode Footprint for ESC")(type "KiCad")(uri "${KIPRJMOD}/libs/Diode Footprint for ESC.pretty")(options "")(descr "SMB"))
+	(lib (name "Current Sense")(type "KiCad")(uri "${KIPRJMOD}/libs/Current Sense.pretty")(options "")(descr "Kelvin shunt footprints"))
+)

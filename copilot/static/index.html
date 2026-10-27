@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PCB Live View</title>
+<style>
+  :root {
+    --bg: #f6f5f1; --panel: #ffffff; --ink: #1d1d1b; --muted: #6b6a64; --line: #e3e1da;
+    --accent: #2f6fde; --add: #1f8a4c; --del: #c2412d; --warn: #b7791f; --info: #5b6b86;
+    --hl: rgba(255, 92, 40, 0.9); --hl-soft: rgba(255, 92, 40, 0.16); --sel: rgba(47, 111, 222, 0.9);
+    --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141413; --panel: #1e1e1c; --ink: #ecebe6; --muted: #9c9a92; --line: #33322e;
+      --accent: #6f9cf0; --add: #4cc283; --del: #ef7a66; --warn: #e0a84a; --info: #9aa9c4;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141413; --panel: #1e1e1c; --ink: #ecebe6; --muted: #9c9a92; --line: #33322e;
+    --accent: #6f9cf0; --add: #4cc283; --del: #ef7a66; --warn: #e0a84a; --info: #9aa9c4;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink);
+    font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--line);
+    background: var(--panel); flex-wrap: wrap; }
+  header h1 { font-size: 15px; margin: 0; font-weight: 600; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); display: inline-block; }
+  .dot.live { background: var(--add); box-shadow: 0 0 0 3px color-mix(in srgb, var(--add) 25%, transparent); }
+  .muted { color: var(--muted); }
+  .tabs { display: flex; gap: 4px; margin-left: auto; }
+  button, select { font: inherit; color: inherit; background: var(--bg); border: 1px solid var(--line);
+    border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+  button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  main { display: grid; grid-template-columns: 1fr 360px; height: calc(100% - 51px); }
+  #stageWrap { position: relative; overflow: hidden; background: var(--bg); }
+  #stage { width: 100%; height: 100%; cursor: grab; display: block; }
+  #stage.drag { cursor: grabbing; }
+  #stage image { image-rendering: optimizeQuality; }
+  .paper { fill: #fff; }
+  .hl circle { fill: var(--hl-soft); stroke: var(--hl); stroke-width: 0.6; animation: pulse 1.6s ease-in-out 3; }
+  .hl text, .sel text { font: 600 3.2px var(--mono); fill: var(--hl); paint-order: stroke; stroke: #fff; stroke-width: 0.8; }
+  .sel circle { fill: none; stroke: var(--sel); stroke-width: 0.7; stroke-dasharray: 1.6 1; }
+  .sel text { fill: var(--sel); }
+  @keyframes pulse { 50% { stroke-width: 1.6; } }
+  #pageBar { position: absolute; left: 12px; top: 12px; display: flex; gap: 6px; align-items: center; }
+  #zoomBar { position: absolute; right: 12px; bottom: 12px; display: flex; gap: 6px; }
+  #banner { position: absolute; left: 12px; right: 12px; bottom: 12px; display: none; padding: 8px 12px;
+    border-radius: 8px; background: color-mix(in srgb, var(--del) 15%, var(--panel)); border: 1px solid var(--del);
+    font-family: var(--mono); font-size: 12px; white-space: pre-wrap; }
+  kicanvas-embed { display: none; width: 100%; height: 100%; }
+  aside { border-left: 1px solid var(--line); background: var(--panel); overflow-y: auto; }
+  aside section { padding: 12px 16px; border-bottom: 1px solid var(--line); }
+  aside h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 8px; }
+  .event { padding: 8px 0; border-top: 1px solid var(--line); }
+  .event:first-of-type { border-top: 0; }
+  .event .meta { display: flex; gap: 8px; align-items: baseline; font-size: 12px; }
+  .diff { font: 12px/1.5 var(--mono); white-space: pre-wrap; margin: 4px 0 0; }
+  .diff .a { color: var(--add); } .diff .d { color: var(--del); } .diff .w { color: var(--warn); }
+  .pill { font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line); }
+  .pill.err { color: var(--del); border-color: var(--del); } .pill.ok { color: var(--add); border-color: var(--add); }
+  .finding { padding: 6px 0; border-top: 1px solid var(--line); cursor: pointer; }
+  .finding:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+  .finding .sev { font: 600 11px var(--mono); text-transform: uppercase; margin-right: 6px; }
+  .sev.error { color: var(--del); } .sev.warning { color: var(--warn); } .sev.info { color: var(--info); }
+  .finding .refs { font: 11px var(--mono); color: var(--muted); }
+  .cp { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; padding: 3px 0; }
+  .cp code { font: 12px var(--mono); color: var(--muted); }
+  .empty { color: var(--muted); font-size: 13px; }
+  @media (max-width: 860px) {
+    main { grid-template-columns: 1fr; grid-template-rows: 60vh auto; height: auto; }
+    aside { border-left: 0; border-top: 1px solid var(--line); }
+  }
+</style>
+<script type="module" src="/static/kicanvas.js"></script>
+</head>
+<body>
+<header>
+  <span id="dot" class="dot" title="live connection"></span>
+  <h1 id="title">PCB Live View</h1>
+  <span id="ver" class="muted"></span>
+  <div class="tabs">
+    <button data-tab="sch" class="on">Schematic</button>
+    <button data-tab="pcb">PCB</button>
+    <button data-tab="kicanvas" title="KiCanvas interactive viewer (alpha; may not render every KiCad 9/10 feature)">Interactive</button>
+    <button id="theme" title="Toggle theme">◐</button>
+  </div>
+</header>
+<main>
+  <div id="stageWrap">
+    <svg id="stage" xmlns="http://www.w3.org/2000/svg">
+      <rect class="paper" id="paper"></rect>
+      <image id="img"></image>
+      <g id="sel" class="sel"></g>
+      <g id="hl" class="hl"></g>
+    </svg>
+    <div id="kc"></div>
+    <div id="pageBar"><select id="page"></select><span id="pageNote" class="muted"></span></div>
+    <div id="zoomBar"><button id="zin">+</button><button id="zout">−</button><button id="fit">Fit</button></div>
+    <div id="banner"></div>
+  </div>
+  <aside>
+    <section><h2>Since last checkpoint</h2><div id="pending" class="empty">No checkpoint yet.</div></section>
+    <section><h2>Review</h2><div id="review" class="empty">No review yet. Ask the agent to run review_design.</div></section>
+    <section><h2>Changes</h2><div id="events" class="empty">Waiting for the first render…</div></section>
+    <section><h2>Checkpoints</h2><div id="cps" class="empty">None yet.</div></section>
+  </aside>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const NS = "http://www.w3.org/2000/svg";
+let state = null, tab = "sch", pageIdx = 0, vb = null, lastSize = null, selected = [];
+
+try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
+$("theme").onclick = () => {
+  const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+  const cur = document.documentElement.dataset.theme || (dark ? "dark" : "light");
+  const next = cur === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem("theme", next); } catch {}
+};
+
+document.querySelectorAll("[data-tab]").forEach((b) => b.onclick = () => {
+  tab = b.dataset.tab;
+  document.querySelectorAll("[data-tab]").forEach((x) => x.classList.toggle("on", x === b));
+  vb = null; render();
+});
+$("page").onchange = (e) => { pageIdx = +e.target.value; vb = null; render(); };
+
+function current() {
+  if (!state) return null;
+  if (tab === "pcb") return state.pcb ? { ...state.pcb, positions: {} } : null;
+  return state.pages[Math.min(pageIdx, state.pages.length - 1)] || null;
+}
+
+function setVB() { $("stage").setAttribute("viewBox", vb.join(" ")); }
+function fit() {
+  const pg = current(); if (!pg) return;
+  const [x, y, w, h] = pg.size, r = $("stage").getBoundingClientRect();
+  const s = Math.max(w / r.width, h / r.height) * 1.04;
+  vb = [x + w / 2 - (r.width * s) / 2, y + h / 2 - (r.height * s) / 2, r.width * s, r.height * s]; setVB();
+}
+
+function render() {
+  const pg = current(), svgMode = tab !== "kicanvas";
+  $("stage").style.display = svgMode ? "block" : "none";
+  $("pageBar").style.display = tab === "sch" ? "flex" : "none";
+  $("zoomBar").style.display = svgMode ? "flex" : "none";
+  $("kc").style.display = svgMode ? "none" : "block";
+  if (!svgMode) return renderKicanvas();
+  if (!pg) { $("img").removeAttribute("href"); return; }
+  const [x, y, w, h] = pg.size;
+  for (const el of [$("img"), $("paper")]) {
+    el.setAttribute("x", x); el.setAttribute("y", y); el.setAttribute("width", w); el.setAttribute("height", h);
+  }
+  $("img").setAttribute("href", pg.url);
+  const sizeKey = tab + pageIdx + pg.size.join(",");
+  if (!vb || lastSize !== sizeKey) { lastSize = sizeKey; fit(); }
+  drawMarks();
+}
+
+function drawMarks() {
+  const pg = current(); $("hl").innerHTML = ""; $("sel").innerHTML = "";
+  if (!pg || !state) return;
+  const pendingRefs = state.pending?.changed_refs || [];
+  const mark = (g, refs, r) => {
+    for (const ref of refs || []) {
+      const p = pg.positions[ref]; if (!p) continue;
+      const c = document.createElementNS(NS, "circle");
+      c.setAttribute("cx", p[0]); c.setAttribute("cy", p[1]); c.setAttribute("r", r);
+      const t = document.createElementNS(NS, "text");
+      t.setAttribute("x", p[0] + r + 0.8); t.setAttribute("y", p[1] - r + 2); t.textContent = ref;
+      g.append(c, t);
+    }
+  };
+  mark($("hl"), pendingRefs, 7);
+  mark($("sel"), selected, 8.5);
+  $("pageNote").textContent = tab === "sch" && state.pages.length > 1
+    ? `${state.pages.length} sheets` : "";
+}
+
+let kcKey = null;
+function renderKicanvas() {
+  const key = state ? state.version : 0; if (kcKey === key) return; kcKey = key;
+  const name = state?.project; if (!name) return;
+  $("kc").innerHTML = "";
+  const emb = document.createElement("kicanvas-embed");
+  emb.setAttribute("controls", "full"); emb.style.display = "block";
+  const files = [`${name}.kicad_sch`, `${name}.kicad_pcb`];
+  for (const f of files) {
+    const src = document.createElement("kicanvas-source");
+    src.setAttribute("src", `/files/${encodeURIComponent(f)}?v=${key}`); emb.append(src);
+  }
+  $("kc").append(emb);
+}
+
+// pan + zoom
+let drag = null;
+$("stage").addEventListener("pointerdown", (e) => { drag = { x: e.clientX, y: e.clientY, vb: [...vb] }; $("stage").classList.add("drag"); $("stage").setPointerCapture(e.pointerId); });
+$("stage").addEventListener("pointermove", (e) => {
+  if (!drag) return; const r = $("stage").getBoundingClientRect(), s = vb[2] / r.width;
+  vb[0] = drag.vb[0] - (e.clientX - drag.x) * s; vb[1] = drag.vb[1] - (e.clientY - drag.y) * s; setVB();
+});
+$("stage").addEventListener("pointerup", () => { drag = null; $("stage").classList.remove("drag"); });
+function zoom(f, cx, cy) {
+  const r = $("stage").getBoundingClientRect();
+  const px = vb[0] + ((cx ?? r.width / 2) / r.width) * vb[2], py = vb[1] + ((cy ?? r.height / 2) / r.height) * vb[3];
+  vb = [px - (px - vb[0]) * f, py - (py - vb[1]) * f, vb[2] * f, vb[3] * f]; setVB();
+}
+$("stage").addEventListener("wheel", (e) => { e.preventDefault(); const r = $("stage").getBoundingClientRect(); zoom(e.deltaY > 0 ? 1.15 : 1 / 1.15, e.clientX - r.left, e.clientY - r.top); }, { passive: false });
+$("zin").onclick = () => zoom(1 / 1.3); $("zout").onclick = () => zoom(1.3); $("fit").onclick = fit;
+addEventListener("resize", () => { if (vb) fit(); });
+
+function focusRefs(refs) {
+  selected = refs || [];
+  const idx = state.pages.findIndex((p) => selected.some((r) => p.positions[r]));
+  if (idx >= 0) {
+    if (tab !== "sch") document.querySelector('[data-tab="sch"]').click();
+    if (idx !== pageIdx) { pageIdx = idx; $("page").value = idx; vb = null; render(); }
+    const pts = selected.map((r) => state.pages[idx].positions[r]).filter(Boolean);
+    const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
+    const pad = 25, w = Math.max(...xs) - Math.min(...xs) + pad * 2, h = Math.max(...ys) - Math.min(...ys) + pad * 2;
+    const r = $("stage").getBoundingClientRect(), s = Math.max(w / r.width, h / r.height);
+    const cx = (Math.max(...xs) + Math.min(...xs)) / 2, cy = (Math.max(...ys) + Math.min(...ys)) / 2;
+    vb = [cx - (r.width * s) / 2, cy - (r.height * s) / 2, r.width * s, r.height * s]; setVB();
+  }
+  drawMarks();
+}
+
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+function diffHtml(text) {
+  return esc(text).split("\n").map((l) => {
+    const cls = l.startsWith("+") ? "a" : l.startsWith("-") ? "d" : l.startsWith("!") ? "w" : "";
+    return cls ? `<span class="${cls}">${l}</span>` : l;
+  }).join("\n");
+}
+
+function renderSide() {
+  const pd = state.pending;
+  if (pd && pd.checkpoint) {
+    const none = !pd.changed_refs.length && pd.diff.startsWith("No ");
+    $("pending").className = none ? "empty" : "";
+    $("pending").innerHTML = `<div class="meta muted" style="font-size:12px">vs <b>${esc(pd.checkpoint.label)}</b>
+      <code>${esc(pd.checkpoint.id.slice(0, 7))}</code></div>` +
+      (none ? "No changes." : `<div class="diff">${diffHtml(pd.diff)}</div>`);
+  } else if (pd && pd.error) {
+    $("pending").textContent = pd.error;
+  }
+  const ev = state.events;
+  $("events").className = ev.length ? "" : "empty";
+  $("events").innerHTML = ev.length ? ev.map((e) => `
+    <div class="event">
+      <div class="meta"><b>v${e.version}</b><span class="muted">${esc(e.time)}</span>
+        <span class="muted">${e.reason === "start" ? "opened" : esc(e.files.join(", "))}</span>
+        ${e.erc ? `<span class="pill ${e.erc.errors ? "err" : "ok"}">ERC ${e.erc.errors}E / ${e.erc.warnings}W</span>` : ""}
+        ${e.pcb_changed ? `<span class="pill">PCB</span>` : ""}</div>
+      ${e.error ? `<div class="diff d">${esc(e.error)}</div>` : ""}
+      ${e.diff ? `<div class="diff">${diffHtml(e.diff)}</div>` : ""}
+    </div>`).join("") : "Waiting for the first render…";
+
+  const rv = state.review;
+  if (rv) {
+    const c = rv.counts;
+    $("review").className = "";
+    $("review").innerHTML = `<div style="margin-bottom:6px"><span class="pill ${rv.pass ? "ok" : "err"}">${rv.pass ? "PASS" : "FAIL"}</span>
+      <span class="muted"> ${c.error} errors · ${c.warning} warnings · ${c.info} notes</span></div>` +
+      rv.findings.map((f, i) => `<div class="finding" data-i="${i}"><span class="sev ${f.severity}">${f.severity}</span>${esc(f.message)}
+        ${f.refs ? `<div class="refs">${esc(f.refs.slice(0, 12).join(", "))}${f.refs.length > 12 ? "…" : ""}</div>` : ""}</div>`).join("");
+    document.querySelectorAll(".finding").forEach((el) => el.onclick = () => focusRefs(rv.findings[+el.dataset.i].refs));
+  }
+  const cps = state.checkpoints;
+  $("cps").className = cps.length ? "" : "empty";
+  $("cps").innerHTML = cps.length ? cps.map((c) => `<div class="cp"><span>${esc(c.label)}</span><code>${esc(c.id.slice(0, 7))}</code></div>`).join("") : "None yet.";
+}
+
+async function load() {
+  const r = await fetch("/api/state"); state = await r.json();
+  $("title").textContent = state.project; document.title = `${state.project} · PCB Live View`;
+  $("ver").textContent = `v${state.version}`;
+  $("page").innerHTML = state.pages.map((p, i) => `<option value="${i}">${esc(p.name)}</option>`).join("");
+  $("page").value = Math.min(pageIdx, state.pages.length - 1);
+  $("banner").style.display = state.error ? "block" : "none"; $("banner").textContent = state.error ? "Render failed, showing the last good version:\n" + state.error : "";
+  render(); renderSide();
+}
+
+function connect() {
+  const es = new EventSource("/events");
+  es.onopen = () => $("dot").classList.add("live");
+  es.onmessage = () => load();
+  es.onerror = () => { $("dot").classList.remove("live"); es.close(); setTimeout(connect, 2000); };
+}
+load().then(connect);
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "JLCPCB standard 2-layer",
+  "source": "jlcpcb.com/capabilities (standard pricing tier). Check the site before ordering; limits change.",
+  "min_track_mm": 0.127,
+  "min_clearance_mm": 0.127,
+  "min_via_drill_mm": 0.3,
+  "min_annular_ring_mm": 0.13,
+  "min_hole_to_edge_mm": 0.3
+}

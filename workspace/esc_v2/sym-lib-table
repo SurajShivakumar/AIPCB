@@ -1,0 +1,5 @@
+(sym_lib_table
+	(version 7)
+	(lib (name "MosFet Symbol")(type "KiCad")(uri "${KIPRJMOD}/libs/MosFet Symbol.kicad_sym")(options "")(descr "CSD18532NQ5B"))
+	(lib (name "New_Library for Gate Driver")(type "KiCad")(uri "${KIPRJMOD}/libs/New_Library for Gate Driver.kicad_sym")(options "")(descr "DRV8320H"))
+)

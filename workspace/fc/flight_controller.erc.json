@@ -1,0 +1,233 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-06T18:53:29-0700",
+    "kicad_version": "9.0.6",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/8fbdd94c-569d-44e4-ae05-6af62b6e13f6",
+            "violations": [
+                {
+                    "description": "Pins of type Bidirectional and Power output are connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 Pin 5 [SDO, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.8382,
+                                "y": 1.2319
+                            },
+                            "uuid": "025cbb4b-48c0-438b-ae71-c5ff5b277576"
+                        },
+                        {
+                            "description": "Symbol #FLG01 Pin 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.2667,
+                                "y": 0.7239
+                            },
+                            "uuid": "71352fe9-ee13-49b0-a83b-b8a0a12e96a0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "Pins of type Unspecified and Passive are connected",
+                    "items": [
+                        {
+                            "description": "Symbol CR1 Pin 1 [Unspecified, Line]",
+                            "pos": {
+                                "x": 3.6576,
+                                "y": 0.9398
+                            },
+                            "uuid": "5ddf6adf-ca93-4fc5-8874-3a283dd6c970"
+                        },
+                        {
+                            "description": "Symbol R16 Pin 1 [Passive, Line]",
+                            "pos": {
+                                "x": 3.6576,
+                                "y": 0.9144
+                            },
+                            "uuid": "0a12e6d7-b05f-4bfe-978d-3c822847833f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'ZENER_DIODE_6%'",
+                    "items": [
+                        {
+                            "description": "Symbol CR1 [BZT52C6V2-7-F]",
+                            "pos": {
+                                "x": 3.6576,
+                                "y": 1.0414
+                            },
+                            "uuid": "d341b92f-e2e4-4b22-aa35-ecd76ed32586"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "Pins of type Unspecified and Power input are connected",
+                    "items": [
+                        {
+                            "description": "Symbol CR1 Pin 2 [Unspecified, Line]",
+                            "pos": {
+                                "x": 3.6576,
+                                "y": 1.0414
+                            },
+                            "uuid": "1a5e0575-a157-4f13-88cf-cda97134d714"
+                        },
+                        {
+                            "description": "Symbol #PWR059 Pin 1 [Power input, Line]",
+                            "pos": {
+                                "x": 3.6576,
+                                "y": 1.0541
+                            },
+                            "uuid": "9b3897a1-876b-448c-8e15-9f85d3383cfc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "Pins of type Unspecified and Passive are connected",
+                    "items": [
+                        {
+                            "description": "Symbol U6 Pin 12 [EN, Unspecified, Line]",
+                            "pos": {
+                                "x": 4.0767,
+                                "y": 0.9271
+                            },
+                            "uuid": "6cf56f3a-9d99-47b4-a921-22a4dc06afeb"
+                        },
+                        {
+                            "description": "Symbol R16 Pin 1 [Passive, Line]",
+                            "pos": {
+                                "x": 3.6576,
+                                "y": 0.9144
+                            },
+                            "uuid": "0a12e6d7-b05f-4bfe-978d-3c822847833f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "Pins of type Unspecified and Passive are connected",
+                    "items": [
+                        {
+                            "description": "Symbol U6 Pin 5 [FREQ, Unspecified, Line]",
+                            "pos": {
+                                "x": 4.5847,
+                                "y": 0.8255
+                            },
+                            "uuid": "7a34acfc-a866-409d-8ae4-3a393cfa14da"
+                        },
+                        {
+                            "description": "Symbol R21 Pin 1 [Passive, Line]",
+                            "pos": {
+                                "x": 4.8133,
+                                "y": 0.8001
+                            },
+                            "uuid": "364f447e-4173-4c68-a925-35cb8debb730"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "Pins of type Unspecified and Passive are connected",
+                    "items": [
+                        {
+                            "description": "Symbol U6 Pin 3 [PG, Unspecified, Line]",
+                            "pos": {
+                                "x": 4.5847,
+                                "y": 0.8763
+                            },
+                            "uuid": "169b14e4-4182-4795-9bec-b40ed76527af"
+                        },
+                        {
+                            "description": "Symbol R22 Pin 1 [Passive, Line]",
+                            "pos": {
+                                "x": 5.0673,
+                                "y": 0.8763
+                            },
+                            "uuid": "f9d9f711-f82a-4470-912d-018609fe53e7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "The current configuration does not include the footprint library 'MP4572'.",
+                    "items": [
+                        {
+                            "description": "Symbol U6 [MP4572GQB-P]",
+                            "pos": {
+                                "x": 4.5847,
+                                "y": 0.9271
+                            },
+                            "uuid": "b41a83e0-2f09-4462-bf13-b557d8405019"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'AFC_Power_Step_Down'",
+                    "items": [
+                        {
+                            "description": "Symbol U6 [MP4572GQB-P]",
+                            "pos": {
+                                "x": 4.5847,
+                                "y": 0.9271
+                            },
+                            "uuid": "b41a83e0-2f09-4462-bf13-b557d8405019"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "Unconnected wire endpoint",
+                    "items": [
+                        {
+                            "description": "Horizontal Wire, length 0.0889 mm",
+                            "pos": {
+                                "x": 1.9558,
+                                "y": 4.9276
+                            },
+                            "uuid": "f9863fca-ce3d-4f29-a4be-daa1025da5a1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "unconnected_wire_endpoint"
+                },
+                {
+                    "description": "Unconnected wire endpoint",
+                    "items": [
+                        {
+                            "description": "Horizontal Wire, length 0.0127 mm",
+                            "pos": {
+                                "x": 1.9812,
+                                "y": 4.9276
+                            },
+                            "uuid": "2ac83060-55e7-4733-b051-751bf15b8857"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "unconnected_wire_endpoint"
+                }
+            ]
+        },
+        {
+            "path": "/Buck Converter/",
+            "uuid_path": "/8fbdd94c-569d-44e4-ae05-6af62b6e13f6/a960059d-cf46-4ce5-8786-a49b6b292933",
+            "violations": []
+        }
+    ],
+    "source": "flight_controller.kicad_sch"
+}

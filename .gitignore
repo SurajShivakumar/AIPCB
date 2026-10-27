@@ -1,0 +1,27 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# engine is cloned by setup.ps1 at a pinned tag
+vendor/
+
+# boards in workspace/ are tracked; not the publish clone of the team repo or copilot's per-project state
+workspace/_publish/
+.copilot/
+
+# JLCPCB parts database (62 MB, downloaded again by the engine)
+data/*.sqlite3
+
+# local Claude Code settings
+.claude/settings.local.json
+
+# KiCad clutter
+*-backups/
+*.kicad_prl
+fp-info-cache
+_autosave-*
+\#auto_saved_files#
+logs/
+~*.lck
+*.lck

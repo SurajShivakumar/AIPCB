@@ -1,0 +1,6 @@
+mcp>=2.3,<3
+spicelib>=1.6
+numpy>=2.0
+watchfiles>=1.0
+pydantic>=2
+pytest>=8
